@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import pywintypes
 import win32file
 import win32service
 import win32serviceutil
@@ -56,8 +55,8 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except pywintypes.error as ex:
-        print(ex)
+    except PermissionError:
+        print('The tool needs to be run with admin rights')
     except Exception as ex:
         print(ex)
     finally:
