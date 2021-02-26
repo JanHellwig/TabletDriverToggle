@@ -45,12 +45,13 @@ def main():
         enable_service(wacom_service)
         print('Now active: Wacom')
 
-    input()
-
 
 if __name__ == '__main__':
     try:
         main()
     except pywintypes.error as ex:
         print(ex)
+    except Exception as ex:
+        print(ex)
+    finally:
         input()
