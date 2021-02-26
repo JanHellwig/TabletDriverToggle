@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import subprocess
 import win32file
 import win32service
 import win32serviceutil
@@ -31,10 +32,14 @@ def install_wintab_dll(service: str) -> None:
 
 def disable_service(service_name: str) -> None:
     win32serviceutil.StopService(service_name)
+    subprocess.run('sc config {} start=demand'.format(
+        service_name), stdout=subprocess.DEVNULL, check=True)
 
 
 def enable_service(service_name: str) -> None:
     win32serviceutil.StartService(service_name)
+    subprocess.run('sc config {} start=auto'.format(
+        service_name), stdout=subprocess.DEVNULL, check=True)
 
 
 def is_service_running(service_name: str) -> bool:
@@ -46,7 +51,7 @@ def main():
     if os.name != 'nt':
         raise RuntimeError('This tool only works on Windows')
 
-    wacom_service = 'Wacom Professional Service'
+    wacom_service = 'WTabletServicePro'
 
     if is_service_running(wacom_service):
         disable_service(wacom_service)
