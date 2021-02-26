@@ -8,13 +8,20 @@ import win32serviceutil
 
 
 def install_wintab_dll(service: str) -> None:
+    os.remove(os.path.join(os.environ.get(
+        'SystemRoot'), 'System32', 'Wintab32.dll'))
+    os.remove(os.path.join(os.environ.get(
+        'SystemRoot'), 'SysWOW64', 'Wintab32.dll'))
+
     # https://www.reddit.com/r/wacom/comments/j1yfw5/wacom_and_huion_driver_conflict/
     win32file.CreateSymbolicLink(
         os.path.join(os.environ.get('SystemRoot'), 'System32', 'Wintab32.dll'),
-        'Wintab32-{}.dll'.format(service), 0)
+        os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                     'Wintab32-{}.dll'.format(service)), 0)
     win32file.CreateSymbolicLink(
         os.path.join(os.environ.get('SystemRoot'), 'SysWOW64', 'Wintab32.dll'),
-        'Wintab32-{}64.dll'.format(service), 0)
+        os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                     'Wintab32-{}64.dll'.format(service)), 0)
 
 
 def disable_service(service_name: str) -> None:
