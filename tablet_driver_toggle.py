@@ -7,10 +7,16 @@ import win32serviceutil
 
 
 def install_wintab_dll(service: str) -> None:
-    os.remove(os.path.join(os.environ.get(
-        'SystemRoot'), 'System32', 'Wintab32.dll'))
-    os.remove(os.path.join(os.environ.get(
-        'SystemRoot'), 'SysWOW64', 'Wintab32.dll'))
+    try:
+        os.remove(os.path.join(os.environ.get(
+            'SystemRoot'), 'System32', 'Wintab32.dll'))
+    except FileNotFoundError:
+        pass
+    try:
+        os.remove(os.path.join(os.environ.get(
+            'SystemRoot'), 'SysWOW64', 'Wintab32.dll'))
+    except FileNotFoundError:
+        pass
 
     # https://www.reddit.com/r/wacom/comments/j1yfw5/wacom_and_huion_driver_conflict/
     win32file.CreateSymbolicLink(
